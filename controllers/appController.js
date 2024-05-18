@@ -120,7 +120,7 @@ module.exports.postEditSwimlane = async (req, res, next) => {
 
 // Create a new task
 module.exports.postNewTask = async (req, res, next) => {
-  const { boardId, title, description, status } = req.body;
+  const { boardId, title, description, status, priority, dueDate } = req.body;
   try {
     let user = await User.findById(req.user._id);
     let board = user.boards.id(boardId);
@@ -130,7 +130,7 @@ module.exports.postNewTask = async (req, res, next) => {
     }
     let swimlaneID = board.swimlanes.id(status);
     // board.swimlanes.push({ title });
-    swimlaneID.tasks.push({ title, description, creationDate: Date.now() });
+    swimlaneID.tasks.push({ title, description, creationDate: Date.now(), priority, dueDate});
     user.totalTasks = Number(user.totalTasks) || 0;
     user.totalTasks += 1;
 
