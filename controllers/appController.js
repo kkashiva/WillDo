@@ -130,11 +130,8 @@ module.exports.postNewTask = async (req, res, next) => {
     }
     let swimlaneID = board.swimlanes.id(status);
     // board.swimlanes.push({ title });
-<<<<<<< HEAD
-    swimlaneID.tasks.push({ title, description, creationDate: Date.now(), priority, dueDate});
-=======
+
     swimlaneID.tasks.push({ title, description, creationDate: Date.now(), priority, dueDate });
->>>>>>> 3e29aac (added kk's changes as well)
     user.totalTasks = Number(user.totalTasks) || 0;
     user.totalTasks += 1;
 

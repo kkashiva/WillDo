@@ -18,11 +18,7 @@ const taskSchema = new Schema({
   },
   priority: {
     type: String,
-<<<<<<< HEAD
     enum: ["High", "Medium", "Low"],
-=======
-    enum: ["Low", "Medium", "High"],
->>>>>>> 3e29aac (added kk's changes as well)
   },
   dueDate: {
     type: Date,
