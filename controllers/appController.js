@@ -143,7 +143,7 @@ module.exports.postNewTask = async (req, res, next) => {
 
 // Edit a task
 module.exports.postEditTask = async (req, res, next) => {
-  const { taskId, swimlaneId, boardId, title, description } = req.body;
+  const { taskId, swimlaneId, boardId, title, description, priority, dueDate, timebox, timeboxDuration } = req.body;
   try {
     let user = await User.findById(req.user._id);
     let board = user.boards.id(boardId);
@@ -152,6 +152,16 @@ module.exports.postEditTask = async (req, res, next) => {
 
     task.title = title;
     task.description = description;
+    task.priority = priority;
+    task.dueDate = dueDate;
+
+    if (timebox === "on") {
+      task.timebox = true;
+      task.timeboxDuration = timeboxDuration;
+    } else {
+      task.timebox = false;
+      task.timeboxDuration = 0;
+    }
 
     user.save();
     res.redirect("/app/board?boardId=" + boardId);

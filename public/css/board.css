@@ -184,8 +184,8 @@ body {
   border-radius: 12px;
   padding: 16px;
   background: rgba(27, 31, 56, 0.6);
-  cursor: grab;
-  /* cursor: pointer; */
+  /* cursor: grab; */
+  cursor: pointer;
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -216,6 +216,41 @@ body {
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
+}
+
+.priorityBadge {
+  padding: 2px 6px;
+  border-radius: 99em;
+  text-align: center;
+  font-size: 11px;
+  font-weight: 600;
+  width: fit-content;
+}
+
+.high {
+  background-color: rgb(255, 206, 206);
+  color: rgb(138, 0, 0);
+}
+
+.medium {
+  background-color: rgb(255, 241, 215);
+  color: rgb(178, 116, 0);
+}
+
+.low {
+  background-color: rgb(198, 255, 198);
+  color: green;
+}
+
+.default {
+  background-color: grey;
+}
+
+.dateAndPriority {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-end;
 }
 
 .titleContainer {
@@ -336,4 +371,90 @@ body {
   /* Adjust animation duration to 2s for quicker movement */
   animation: flyAndFade 2.3s linear forwards; /* Use forwards to keep the element in the final state */
   display: none; /* Hide by default */
+}
+
+/* -------- Additional Modal Styling -------- */
+
+.checkbox-btn {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 16px;
+  /* justify-content: center; */
+  border: 1px solid var(--neutral600);
+  color: var(--neutral600);
+
+  background-color: var(--input-bg);
+  border: 1px solid var(--dark-grey-purple);
+  border-radius: 10px;
+  padding: 12px 16px;
+  font: var(--font-small-heading);
+  cursor: pointer;
+}
+
+.checkbox-btn:hover {
+  background: none;
+  border-color: var(--primary-purple);
+  color: var(--text-purple);
+}
+
+.timeboxCheckbox {
+  margin-right: 8px;
+  border-radius: 2px;
+}
+
+.timeboxCheckbox:checked {
+  background-color: var(--primary-purple);
+}
+
+.timeboxLabel {
+  width: 100%;
+}
+
+.conditionalRenderTimeboxElements {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.calendar-btn {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  height: 48px;
+  background-color: var(--dark-grey-purple);
+  /* border: 1px solid #1b1835; */
+}
+
+.editTaskModal {
+  width: 500px;
+}
+
+.widerInput input,
+.widerInput textarea {
+  width: 100%;
+}
+
+.smallerInputContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  width: 100%;
+}
+
+.smallerInput {
+  width: 220px;
+  /* flex-shrink: 1; */
+}
+
+.conditionalRenderTimeboxElements {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  align-items: flex-end;
 }

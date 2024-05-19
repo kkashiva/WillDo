@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const app = express();
 const path = require("path");
@@ -9,7 +10,6 @@ const MongoStore = require("connect-mongo");
 const session = require("express-session");
 const passport = require("passport");
 const isLoggedIn = require("./middlewares/isLoggedIn");
-require("dotenv").config();
 const moment = require("moment");
 
 hbs.registerPartials(__dirname + "/views/partials");
@@ -63,7 +63,7 @@ app.use((err, req, res, next) => {
   // Set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get("env") === "development" ? err : {};
-
+  console.error(err);
   // Render the error page
   res.status(err.status || 500);
   res.render("error", { error: err });
@@ -73,8 +73,28 @@ app.use((err, req, res, next) => {
 // Register a helper for date formatting
 hbs.registerHelper("formatDate", function (dateString) {
   const date = moment(dateString);
-  return date.format("MMM DD, YYYY - hh:mm A"); // Formats date as "Feb 06, 2024 - 11:47 PM"
+  // return date.format("MMM DD, YYYY - hh:mm A"); // Formats date as "Feb 06, 2024 - 11:47 PM"
+  return date.format("MMM DD, YYYY"); // Formats date as "Feb 06, 2024"
 });
+//Format date for input type date
+// hbs.registerHelper("formatDateForInput", function (dateString) {
+//   console.log("Received date:", dateString); // Log input to the helper
+//   if (!dateString) return "";
+//   try {
+//     const date = moment(dateString);
+//     const formattedDate = date.format("YYYY-MM-DD");
+//     console.log("Formatted date:", formattedDate); // Log output from the helper
+//     return formattedDate;
+//   } catch (e) {
+//     console.error("Error formatting date for input:", e);
+//     return "";
+//   }
+// });
+hbs.registerHelper("formatDateForInput", function (dateString) {
+  if (!dateString) return "";
+  return moment(dateString).format("YYYY-MM-DD"); // Formats the date as 'YYYY-MM-DD'
+});
+
 // Defining a helper function to compare values
 hbs.registerHelper("isEqual", function (a, b, options) {
   if (a === b) {

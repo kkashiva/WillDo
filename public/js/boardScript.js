@@ -27,6 +27,7 @@ newTaskBtn.addEventListener("click", (ev) => {
 const closeModalButtons = document.querySelectorAll(".closeModal");
 closeModalButtons.forEach((button) => {
   button.addEventListener("click", () => {
+    event.stopPropagation(); // Prevent the event from bubbling up to the parent element
     const modal = button.closest(".modal");
     modal.close();
   });
@@ -82,11 +83,62 @@ const editTaskModal = document.querySelector(".editTaskModal");
 
 editTaskBtn.forEach((item) => {
   item.addEventListener("click", (ev) => {
-    ev.preventDefault(); // Prevent the default anchor action
+    // ev.preventDefault(); // Prevent the default anchor action
 
     const taskId = item.getAttribute("data-id");
 
     let modal = document.querySelector(`.editTaskModal[data-id="${taskId}"]`);
     modal.showModal();
+  });
+});
+
+// edit task modal on clicking task card
+const taskCard = document.querySelectorAll(".taskCard");
+
+taskCard.forEach((item) => {
+  item.addEventListener("click", (ev) => {
+    // ev.preventDefault(); // Prevent the default anchor action
+
+    // Check if the event target or any of its parents should not trigger the modal
+    if (!ev.target.closest(".celebrate-btn, .delete-task-btn, .closeModal, .checkbox-btn, .timeboxLabel, .timeboxCheckbox")) {
+      const taskId = item.getAttribute("data-id");
+      let modal = document.querySelector(`.editTaskModal[data-id="${taskId}"]`);
+      modal.showModal();
+    }
+  });
+});
+
+// toggling the conditional timebox elements
+document.addEventListener("DOMContentLoaded", function () {
+  // Function to toggle the 'hidden' class based on the checkbox state
+  function toggleTimeboxElements(checkbox) {
+    const timeboxElements = checkbox.closest(".checkbox-btn").nextElementSibling;
+    if (checkbox.checked) {
+      timeboxElements.classList.remove("hidden");
+    } else {
+      timeboxElements.classList.add("hidden");
+    }
+  }
+
+  // Select all checkboxes
+  const checkboxes = document.querySelectorAll(".timeboxCheckbox");
+
+  // Set the initial state
+  checkboxes.forEach((checkbox) => {
+    toggleTimeboxElements(checkbox);
+
+    // Add event listener for click events
+    checkbox.addEventListener("change", function () {
+      toggleTimeboxElements(checkbox);
+    });
+    // Add event listener for checkbox-btn click events
+    const checkboxBtn = checkbox.closest(".checkbox-btn");
+    checkboxBtn.addEventListener("click", function (event) {
+      if (event.target !== checkbox) {
+        // Avoid toggling when clicking directly on the checkbox
+        checkbox.checked = !checkbox.checked;
+        toggleTimeboxElements(checkbox);
+      }
+    });
   });
 });

@@ -15,13 +15,20 @@ const taskSchema = new Schema({
     type: Number,
     default: 0,
   },
-  // priority with values 'high' 'medium' 'low'
   priority: {
     type: String,
-    enum: ["high", "medium", "low"],},
-  // task deadline or due date
+    enum: ["High", "Medium", "Low"],
+  },
   dueDate: {
     type: Date,
+  },
+  timebox: {
+    type: Boolean,
+    default: false,
+  },
+  timeboxDuration: {
+    type: Number,
+    default: 0,
   },
 });
 
