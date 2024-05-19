@@ -18,5 +18,6 @@ router.get("/board/completeTask", appController.getCompleteTask);
 router.post("/board/editBoard", appController.postEditBoard);
 router.post("/board/editSwimlane", appController.postEditSwimlane);
 router.post("/board/editTask", appController.postEditTask);
+router.post("/bookTime", appController.postBookTime);
 
 module.exports = router;

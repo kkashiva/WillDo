@@ -1,6 +1,10 @@
 const User = require("../models/users");
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
+const {google} = require('googleapis');
+const express = require('express');
+const session = require('express-session');
+
 
 // Go to app page
 module.exports.getApp = (req, res, next) => {
@@ -302,6 +306,97 @@ module.exports.getCompleteTask = async (req, res, next) => {
 
     await user.save();
     res.redirect("/app/board?boardId=" + boardId);
+  } catch (err) {
+    res.render("error", { err });
+  }
+};
+
+// create calendar event
+module.exports.postBookTime = async (req, res, next) => {
+  const { taskId, swimlaneId, boardId, title, description, priority, dueDate, timebox, timeboxDuration } = req.body;
+  try {
+    let user = await User.findById(req.user._id);
+    let board = user.boards.id(boardId);
+    let swimlane = board.swimlanes.id(swimlaneId);
+    let task = swimlane.tasks.id(taskId);
+
+    task.title = title;
+    task.description = description;
+    task.priority = priority;
+    task.dueDate = dueDate;
+    task.timebox = timebox;
+    task.timeboxDuration = timeboxDuration;
+
+    // if user makes any changes and clicks on book time instead of save, then the task will be updated
+    user.save();
+
+    // Google Calendar API authentication
+    const clientId = process.env.Google_Cal_ClientID;
+    const clientSecret = process.env.Google_Cal_Secret;
+    const redirectUrl = 'http://localhost:4444/oauth2callback';
+
+    const oauth2Client = new google.auth.OAuth2(
+      clientId,
+      clientSecret,
+      redirectUrl
+    );
+    
+    // Access scopes for creating Calendar event
+    const scopes = [
+      'https://www.googleapis.com/auth/calendar.events'
+    ];
+
+    // Generate a url that asks permissions for the Drive activity scope
+    const authorizationUrl = oauth2Client.generateAuthUrl({
+      // 'online' (default) or 'offline' (gets refresh_token)
+      access_type: 'offline',
+      // Pass in the scopes array defined above.
+      scope: scopes
+    });
+
+    // Redirect to the OAuth2 consent form
+    res.redirect(authorizationUrl);
+
+    // Handle the OAuth 2.0 server response
+    const url = require('url');
+
+    app.get('/oauth2callback', async (req, res) => {
+      let q = url.parse(req.url, true).query;
+
+      if (q.error) {
+        console.log('Error:' + q.error);
+      } else { // Get access tokens
+        let { tokens } = await oauth2Client.getToken(q.code);
+        oauth2Client.setCredentials(tokens);
+      }
+    });
+
+    // Create a new calendar event
+    const calendar = google.calendar({ version: 'v3', auth: oauth2Client });
+
+    const event = {
+      'summary': 'Test Task Focus',
+      'description': 'booked via WillDo app',
+      'start': {
+        'dateTime': '2024-05-20T09:00:00-04:00',
+        'timeZone': 'America/New_York',
+      },
+      'end': {
+        'dateTime': '2024-05-20T10:00:00-04:00',
+        'timeZone': 'America/New_York',
+      }
+    };
+
+    calendar.events.insert({
+      calendarId: 'primary',
+      resource: event,
+    }, (err, res) => {
+      if (err) return console.log('The Calendar API returned an error: ' + err);
+      console.log('Event created: %s', res.data.htmlLink);
+    });
+
+    res.redirect("/app/board?boardId=" + boardId);
+
   } catch (err) {
     res.render("error", { err });
   }

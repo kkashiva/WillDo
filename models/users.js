@@ -31,6 +31,9 @@ const taskSchema = new Schema({
     type: Number,
     default: 0,
   },
+  timeboxStart: {
+    type: Date,
+  },
 });
 
 // Swimlane schema

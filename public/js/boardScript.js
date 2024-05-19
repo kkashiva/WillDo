@@ -142,3 +142,43 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 });
+
+// listener for addToCalendar button click
+document.getElementById('addToCalendar').addEventListener('click', function () {
+  const taskId = document.getElementById('taskId').value;
+  const swimlaneId = document.getElementById('swimlaneId').value;
+  const boardId = document.getElementById('boardId').value;
+  const title = document.getElementById('title').value;
+  const description = document.getElementById('description').value;
+  const priority = document.getElementById('priority').value;
+  const dueDate = document.getElementById('dueDate').value;
+  const timebox = document.getElementById('timebox').value;
+  const timeboxDuration = document.getElementById('timeboxDuration').value;
+
+  const data = {
+    taskId,
+    swimlaneId,
+    boardId,
+    title,
+    description,
+    priority,
+    dueDate,
+    timebox,
+    timeboxDuration
+  };
+
+  fetch('/bookTime', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  })
+    .then(response => response.json())
+    .then(data => {
+      console.log('Success:', data);
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+    });
+});
