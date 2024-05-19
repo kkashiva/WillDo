@@ -425,9 +425,11 @@ body {
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 10px;
+  justify-content: center;
+  gap: 16px;
   height: 48px;
   background-color: var(--dark-grey-purple);
+  width: 100%;
   /* border: 1px solid #1b1835; */
 }
 
@@ -453,6 +455,13 @@ body {
 }
 
 .conditionalRenderTimeboxElements {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: center;
+}
+
+.conditionalInputs {
   display: flex;
   flex-direction: row;
   gap: 16px;

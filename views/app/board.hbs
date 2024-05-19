@@ -171,76 +171,83 @@
                     <h6 class="priorityBadge {{task.priority}}">{{task.priority}}</h6>
                   </div>
                   {{! edit task modal }}
+
                   <dialog class="editTaskModal modal" data-id="{{task.id}}">
                     <div class="modalInsideWrapper">
-                      <div class="modalTitle">
-                        <h3>Edit task</h3>
-                        <button class="closeModal"  type="button"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M15 5L5 15M5 5L15 15" stroke="#B3B2B3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                          </svg>
-                        </button>
-                      </div>
-
-                      <form action="/app/board/editTask" method="post">
-                        <input type="hidden" id="boardId" name="boardId" value="{{../../board._id}}" />
-                        <input type="hidden" id="swimlaneId" name="swimlaneId" value="{{swimlane.id}}" />
-                        <input type="hidden" id="taskId" name="taskId" value="{{task.id}}" />
-                        
-                        <div class="modalInputwithTitle widerInput">
-                          <p>What's the task?</p>
-                          <input class="input" type="text" id="title" name="title" placeholder="Write task here" value="{{task.title}}" required />
+                        <div class="modalTitle">
+                            <h3>Edit task</h3>
+                            <button class="closeModal" type="button">
+                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M15 5L5 15M5 5L15 15" stroke="#B3B2B3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                            </button>
                         </div>
 
-                        <div class="modalInputwithTitle widerInput">
-                          <p>Add details (optional)</p>
-                          <textarea class="input" id="description" name="description" rows="5" cols="33" />{{task.description}}</textarea>
-                        </div>
+                        <form action="/app/board/editTask" method="post" class="taskForm">
+                            <input type="hidden" name="boardId" value="{{../../board._id}}" />
+                            <input type="hidden" name="swimlaneId" value="{{swimlane.id}}" />
+                            <input type="hidden" name="taskId" value="{{task.id}}" />
+                            
+                            <div class="modalInputwithTitle widerInput">
+                                <p>What's the task?</p>
+                                <input class="input" type="text" name="title" placeholder="Write task here" value="{{task.title}}" required />
+                            </div>
 
-                        <div class="smallerInputContainer">
-                          <div class="modalInputwithTitle ">
-                            <p>Due date:</p>                    
-                            <input class="input smallerInput" type="date" id="dueDate" name="dueDate" value="{{formatDateForInput task.dueDate}}" required />
-                          </div>
+                            <div class="modalInputwithTitle widerInput">
+                                <p>Add details (optional)</p>
+                                <textarea class="input" name="description" rows="5" cols="33">{{task.description}}</textarea>
+                            </div>
 
-                          <div class="modalInputwithTitle ">
-                            {{!-- <label for="status">Status:</label> --}}
-                            <p>Priority:</p>
-                            <select class="input smallerInput" name="priority" id="priority">
-                              <option value="High">High</option>
-                              <option value="Medium">Medium</option>
-                              <option value="Low">Low</option>                            
-                            </select>
-                          </div>
-                        </div>
+                            <div class="smallerInputContainer">
+                                <div class="modalInputwithTitle">
+                                    <p>Due date:</p>
+                                    <input class="input smallerInput" type="date" name="dueDate" value="{{formatDateForInput task.dueDate}}" required />
+                                </div>
 
-                        <div class="checkbox-btn">
-                          <label class="timeboxLabel" for="timebox" style="display: block; cursor: pointer;">
-                            <input class="timeboxCheckbox" type="checkbox" id="timebox" name="timebox" {{#if task.timebox}}checked{{/if}}  />
-                            Timebox this task
-                          </label>
-                        </div>
+                                <div class="modalInputwithTitle">
+                                    <p>Priority:</p>
+                                    <select class="input smallerInput" name="priority">
+                                        <option value="High">High</option>
+                                        <option value="Medium">Medium</option>
+                                        <option value="Low">Low</option>
+                                    </select>
+                                </div>
+                            </div>
 
+                            <div class="checkbox-btn">
+                                <label class="timeboxLabel" for="timebox" style="display: block; cursor: pointer;">
+                                    <input class="timeboxCheckbox" type="checkbox" name="timebox" {{#if task.timebox}}checked{{/if}} />
+                                    Timebox this task
+                                </label>
+                            </div>
 
-                        <div class="conditionalRenderTimeboxElements">
-                          
-                          <button class="cta-btn calendar-btn smallerInput" id="addToCalendar"> <img src="/assets/24x24.png" width="24px" alt="">Add to Calendar</button>
+                            <div class="conditionalRenderTimeboxElements">
+                                <div class="conditionalInputs">
+                                    <div class="modalInputwithTitle">
+                                        <p>Start Time:</p>
+                                        <input class="input smallerInput" type="datetime-local" name="timeboxStart" value="" />
+                                    </div>
 
-                          <div class="modalInputwithTitle ">
-                            <p>Define time (in hours)</p>
-                            <input class="input smallerInput" type="number" id="timeboxDuration" name="timeboxDuration" placeholder="Enter time in hours" value="{{task.timeboxDuration}}" required />
-                          </div>
+                                    <div class="modalInputwithTitle">
+                                        <p>Task Duration (in hours)</p>
+                                        <input class="input smallerInput" type="number" name="timeboxDuration" placeholder="Enter time in hours" value="{{task.timeboxDuration}}" required />
+                                    </div>
+                                </div>
 
-                        </div>
-                        
-                        <div class="modalButtons">
-                          <button class="closeModal cta-btn cancelModalBtn"  type="button">Cancel</button>
-                          <button class="cta-btn" type="submit">Save</button>
-                        </div>
+                                <button class="cta-btn calendar-btn addToCalendar">
+                                    <img src="/assets/24x24.png" width="24px" alt="">Add to Google Calendar
+                                </button>
+                            </div>
 
-                  </form>
+                            <div class="modalButtons">
+                                <button class="closeModal cta-btn cancelModalBtn" type="button">Cancel</button>
+                                <button class="cta-btn" type="submit">Save</button>
+                            </div>
+                        </form>
+                    </div>
+                  </dialog>
 
-                </div>
-              </dialog>
+                  
             </div>
 
 
