@@ -324,8 +324,19 @@ module.exports.postBookTime = async (req, res, next) => {
     task.description = description;
     task.priority = priority;
     task.dueDate = dueDate;
-    task.timebox = timebox;
+
+    if (timebox === "on") {
+      task.timebox = true;
+      task.timeboxDuration = timeboxDuration;
+    } else {
+      task.timebox = false;
+      task.timeboxDuration = 0;
+    }
+
     task.timeboxDuration = timeboxDuration;
+
+    // console log the task to debug
+    console.log(task);
 
     // if user makes any changes and clicks on book time instead of save, then the task will be updated
     user.save();

@@ -205,7 +205,7 @@ document.addEventListener("DOMContentLoaded", function () {
         timeboxStart: new Date(formData.get("timeboxStart")).toISOString(),
       };
 
-      fetch("/bookTime", {
+      fetch("/app/bookTime", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
